@@ -33,4 +33,15 @@ public class User {
     private String instagram;
     private Intention intention;
 
+    public User(UserDTO data) {
+        this.name = data.name();
+        this.email = data.email();
+        this.password = data.password();
+        this.birthDate = data.birthDate();
+        this.course = data.course();
+        this.campus = data.campus();
+        this.interests = data.interests();
+        this.instagram = data.instagram();
+        this.intention = data.intention();
+    }
 }
