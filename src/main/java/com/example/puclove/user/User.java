@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Document(collection = "users")
@@ -40,8 +41,14 @@ public class User {
         this.birthDate = data.birthDate();
         this.course = data.course();
         this.campus = data.campus();
-        this.interests = data.interests();
         this.instagram = data.instagram();
         this.intention = data.intention();
     }
+
+    public void addInterest(Interest interest) {
+        if(interests == null)
+            interests = new ArrayList<>();
+        interests.add(interest);
+    }
+
 }
