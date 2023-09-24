@@ -1,5 +1,8 @@
 package com.example.puclove.user;
 
+import com.example.puclove.interest.Interest;
+import com.example.puclove.interest.InterestRepository;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +13,8 @@ import java.util.Optional;
 public class UserService {
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private InterestRepository interestRepository;
 
     public List<User> allUsers() {
         return userRepository.findAll();
@@ -21,12 +26,20 @@ public class UserService {
 
     public User createUser(UserDTO data) {
         User newUser = new User(data);
-        this.saveUser(newUser);
+
+        for (String interestId : data.interestsIds()) {
+            ObjectId interestObjectId = new ObjectId(interestId);
+            Interest interest = interestRepository.findInterestById(interestObjectId).orElse(null);
+            if (interest != null)
+                newUser.addInterest(interest);
+        }
+
+        saveUser(newUser);
         return newUser;
     }
 
     public void saveUser(User user) {
-        this.userRepository.save(user);
+        userRepository.save(user);
     }
 
 
