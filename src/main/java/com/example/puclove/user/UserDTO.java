@@ -1,5 +1,7 @@
 package com.example.puclove.user;
 
+import org.bson.types.ObjectId;
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -9,7 +11,7 @@ public record UserDTO(String name,
                       LocalDate birthDate,
                       String course,
                       String campus,
-                      List<String> interestsIds,
+                      List<ObjectId> interestsIds,
                       String instagram,
                       Intention intention) {
 

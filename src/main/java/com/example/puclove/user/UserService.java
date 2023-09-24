@@ -27,9 +27,8 @@ public class UserService {
     public User createUser(UserDTO data) {
         User newUser = new User(data);
 
-        for (String interestId : data.interestsIds()) {
-            ObjectId interestObjectId = new ObjectId(interestId);
-            Interest interest = interestRepository.findInterestById(interestObjectId).orElse(null);
+        for (ObjectId interestId : data.interestsIds()) {
+            Interest interest = interestRepository.findInterestById(interestId).orElse(null);
             if (interest != null)
                 newUser.addInterest(interest);
         }
