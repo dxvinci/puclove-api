@@ -20,8 +20,8 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public Optional<User> singleUserByEmail(String email) {
-        return userRepository.findUserByEmail(email);
+    public Optional<User> singleUserByEmailAndPassword(String email, String password) {
+        return userRepository.findUserByEmailAndPassword(email, password);
     }
 
     public User createUser(UserDTO data) {

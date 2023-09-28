@@ -20,9 +20,13 @@ public class UserController {
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-    @GetMapping("/{email}")
-    public ResponseEntity<Optional<User>> getUserByEmail(@PathVariable String email) {
-        Optional<User> user = userService.singleUserByEmail(email);
+    @GetMapping("/{email}/{password}")
+    public ResponseEntity<Optional<User>> getUserByEmailAndPassword(@PathVariable String email, @PathVariable String password) {
+        Optional<User> user = userService.singleUserByEmailAndPassword(email, password);
+
+        if (user.isEmpty())
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
