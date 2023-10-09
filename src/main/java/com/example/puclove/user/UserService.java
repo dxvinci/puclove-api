@@ -24,13 +24,14 @@ public class UserService {
         return userRepository.findUserByEmail(email);
     }
 
+    public Optional<User> findUserByUsername(String name) { return userRepository.findUserByUsername(name);}
+
     public User createUser(UserDTO data) {
         User newUser = new User(data);
 
-        for (ObjectId interestId : data.interestsIds()) {
-            Interest interest = interestRepository.findInterestById(interestId).orElse(null);
-            if (interest != null)
-                newUser.addInterest(interest);
+        for (Interest interest : data.interestsIds()) {
+            Interest interests = interestRepository.findInterestById(interest.getId()).orElse(null);
+            newUser.addInterest(interest);
         }
 
         saveUser(newUser);
