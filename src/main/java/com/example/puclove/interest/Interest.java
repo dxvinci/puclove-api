@@ -19,4 +19,17 @@ public class Interest {
     private ObjectId id;
     private String interest;
 
+    public Interest(String name) {
+        this.interest = name;
+    }
+
+    // Getters and setters for the 'name' property
+    public String getName() {
+        return interest;
+    }
+
+    public void setName(String name) {
+        this.interest = name;
+    }
+
 }
