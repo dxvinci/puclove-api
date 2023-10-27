@@ -1,10 +1,10 @@
 package com.example.puclove.user;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,5 +38,17 @@ public class UserController {
         User newUser = userService.createUser(user);
         return new ResponseEntity<>(newUser, HttpStatus.CREATED);
     }
+
+    @GetMapping("/matchingUsers")
+    public ResponseEntity<Optional<List<User>>> getMatchingInterestsUsers(@AuthenticationPrincipal User user) {
+        Optional<List<User>> users = userService.matchingInterestsUsers(user);
+
+        if (users.isEmpty())
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        return new ResponseEntity<>(users, HttpStatus.OK);
+    }
+
+
 
 }
