@@ -25,6 +25,13 @@ public class StorageController {
     @Autowired
     private StorageService storageService;
 
+    /**
+     * Endpoint para upload de imagens de usuário. Espera um arquivo de imagem e o usuário autenticado.
+     * @param file
+     * @param user
+     * @return ResponseEntity com o caminho da imagem salva no sistema de arquivos.
+     * @throws IOException
+     */
     @PostMapping
     public ResponseEntity<?> uploadUserImageToFileSystem(@RequestParam("image") MultipartFile file,
                                                      @AuthenticationPrincipal User user) throws IOException {
@@ -33,6 +40,12 @@ public class StorageController {
                 .body(uploadImage);
     }
 
+    /**
+     * Endpoint para download de imagens do sistema de arquivos. Espera o nome do arquivo.
+     * @param fileName
+     * @return ResponseEntity com o arquivo de imagem.
+     * @throws IOException
+     */
     @GetMapping("/{fileName}")
     public ResponseEntity<?> downloadImageFromFileSystem(@PathVariable String fileName) throws IOException {
         byte[] imageData=storageService.downloadImageFromFileSystem(fileName);
@@ -41,6 +54,12 @@ public class StorageController {
                 .body(imageData);
     }
 
+    /**
+     * Endpoint para download de imagens de usuário do sistema de arquivos. Espera o username do usuário.
+     * @param username
+     * @return ResponseEntity com o arquivo de imagem.
+     * @throws IOException
+     */
     @GetMapping("/{username}")
     public ResponseEntity<?> downloadUserImagesFromFileSystem(@PathVariable String username) throws IOException {
         List<byte[]> imagesData = storageService.downloadUserImagesFromFileSystem(username);
@@ -49,6 +68,11 @@ public class StorageController {
                 .body(imagesData);
     }
 
+    /**
+     * Endpoint para objetos userImages. Espera o username do usuário.
+     * @param username
+     * @return ResponseEntity com lista de objetos userImages.
+     */
     @GetMapping("/filepath/{username}")
     public ResponseEntity<Optional<List<UserImage>>> getUserImages(@PathVariable String username){
         Optional<List<UserImage>> userImages = Optional.ofNullable(storageService.userImages(username));

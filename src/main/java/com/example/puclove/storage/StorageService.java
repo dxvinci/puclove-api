@@ -30,6 +30,13 @@ public class StorageService {
     private final String FOLDER_PATH="./src/main/resources/static/images/";
 
 
+    /**
+     * Salva uma imagem de usuário no sistema de arquivos.
+     * @param file
+     * @param user
+     * @return caminho da imagem salva.
+     * @throws IOException
+     */
     public String uploadUserImageToFileSystem(MultipartFile file, User user) throws IOException {
         String filePath = FOLDER_PATH + file.getOriginalFilename();
         FileData filedata = fileDataRepository.save(FileData.builder()
@@ -48,12 +55,24 @@ public class StorageService {
         return filePath;
     }
 
+    /**
+     * Faz o download de uma imagem do sistema de arquivos.
+     * @param fileName
+     * @return arquivo de imagem.
+     * @throws IOException
+     */
     public byte[] downloadImageFromFileSystem(String fileName) throws IOException {
         Optional<FileData> fileData = fileDataRepository.findByName(fileName);
         String filePath=fileData.get().getFilePath();
         return Files.readAllBytes(new File(filePath).toPath());
     }
 
+    /**
+     * Faz o download de todas as imagens de um usuário do sistema de arquivos.
+     * @param username
+     * @return lista de arquivos de imagem.
+     * @throws IOException
+     */
     public List<byte[]> downloadUserImagesFromFileSystem(String username) throws IOException {
         User user = userService.findUserByUsername(username).orElse(null);
 
@@ -74,6 +93,11 @@ public class StorageService {
         }
     }
 
+    /**
+     * Retorna uma lista de objetos UserImage de um usuário.
+     * @param username
+     * @return lista de objetos UserImage.
+     */
     public List<UserImage> userImages(String username) {
         User user = userService.findUserByUsername(username).orElse(null);
 
