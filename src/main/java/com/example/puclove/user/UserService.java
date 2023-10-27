@@ -2,7 +2,6 @@ package com.example.puclove.user;
 
 import com.example.puclove.interest.Interest;
 import com.example.puclove.interest.InterestRepository;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,16 +15,30 @@ public class UserService {
     @Autowired
     private InterestRepository interestRepository;
 
+    /**
+     * Busca todos os usuários
+     * @return lista de usuários
+     */
     public List<User> allUsers() {
         return userRepository.findAll();
     }
 
-    public Optional<User> singleUserByEmail(String email) {
-        return userRepository.findUserByEmail(email);
+    public Optional<User> singleUserByEmailAndPassword(String email, String password) {
+        return userRepository.findUserByEmailAndPassword(email, password);
     }
 
+    /**
+     * Busca um usuário pelo username
+     * @param name
+     * @return usuário
+     */
     public Optional<User> findUserByUsername(String name) { return userRepository.findUserByUsername(name);}
 
+    /**
+     * Cria um usuário no banco de dados
+     * @param data
+     * @return usuário criado
+     */
     public User createUser(UserDTO data) {
         User newUser = new User(data);
 
@@ -38,9 +51,29 @@ public class UserService {
         return newUser;
     }
 
+    /**
+     * Salva um usuário no banco de dados
+     * @param user
+     */
     public void saveUser(User user) {
         userRepository.save(user);
     }
 
+
+    /**
+     * Get de todos os usuários que tenham pelo menos um interesse em comum com o usuário atual
+     * @return lista de usuários
+     */
+    public Optional<List<User>> matchingInterestsUsers(User user) {
+
+        List<Interest> currentUserInterests = user.getInterests();
+        List<User> users = null;
+
+        for (Interest interest : currentUserInterests) {
+            users.addAll(userRepository.findUsersByInterest(interest));
+        }
+
+        return Optional.of(users);
+    }
 
 }

@@ -1,10 +1,9 @@
 package com.example.puclove.Security;
 
-import com.example.puclove.user.AutheticationDTO;
+import com.example.puclove.user.AuthenticationDTO;
 import com.example.puclove.user.RegisterDTO;
 import com.example.puclove.user.User;
 import com.example.puclove.user.UserRepository;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -40,8 +39,9 @@ public class AuthController {
      * @return ResponseEntity com um token JWT se a autenticação for bem-sucedida.
      */
     @PostMapping("/login")
+
     @CrossOrigin(origins = "*")
-    public ResponseEntity<?> login(@RequestBody @Validated AutheticationDTO authenticationDTO){
+    public ResponseEntity<?> login(@RequestBody @Validated AuthenticationDTO authenticationDTO){
         var usernamePassword = new UsernamePasswordAuthenticationToken(authenticationDTO.login(), authenticationDTO.password());
 
         var auth = this.authenticationManager.authenticate(usernamePassword);

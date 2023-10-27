@@ -1,16 +1,17 @@
 package com.example.puclove.user;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
 @RestController()
+@CrossOrigin("http://localhost:5173")
 @RequestMapping("/api/v1/users")
 public class UserController {
     @Autowired
@@ -22,9 +23,13 @@ public class UserController {
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-    @GetMapping("/{email}")
-    public ResponseEntity<Optional<User>> getUserByEmail(@PathVariable String email) {
-        Optional<User> user = userService.singleUserByEmail(email);
+    @GetMapping("/{email}/{password}")
+    public ResponseEntity<Optional<User>> getUserByEmailAndPassword(@PathVariable String email, @PathVariable String password) {
+        Optional<User> user = userService.singleUserByEmailAndPassword(email, password);
+
+        if (user.isEmpty())
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
@@ -33,5 +38,17 @@ public class UserController {
         User newUser = userService.createUser(user);
         return new ResponseEntity<>(newUser, HttpStatus.CREATED);
     }
+
+    @GetMapping("/matchingUsers")
+    public ResponseEntity<Optional<List<User>>> getMatchingInterestsUsers(@AuthenticationPrincipal User user) {
+        Optional<List<User>> users = userService.matchingInterestsUsers(user);
+
+        if (users.isEmpty())
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        return new ResponseEntity<>(users, HttpStatus.OK);
+    }
+
+
 
 }

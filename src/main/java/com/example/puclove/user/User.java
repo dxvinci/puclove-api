@@ -1,10 +1,7 @@
 package com.example.puclove.user;
 
 import com.example.puclove.interest.Interest;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -35,6 +32,7 @@ public class User implements UserDetails {
     private LocalDate birthDate;
     private String course;
     private String campus;
+    @Getter
     @DocumentReference
     private List<Interest> interests;
     private String instagram;
