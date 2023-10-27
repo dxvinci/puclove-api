@@ -78,12 +78,9 @@ public class StorageService {
         User user = userService.findUserByUsername(username).orElse(null);
 
             if (user != null) {
-                List<UserImage> userImages = userImageRepository.findByUserId(user.getId());
-
-                return userImages;
+                return userImageRepository.findByUserId(user.getId());
             } else {
                 return Collections.emptyList();
             }
-
     }
 }

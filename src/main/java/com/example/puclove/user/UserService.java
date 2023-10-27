@@ -3,8 +3,6 @@ package com.example.puclove.user;
 import com.example.puclove.interest.Interest;
 import com.example.puclove.interest.InterestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,7 +17,7 @@ public class UserService {
 
     /**
      * Busca todos os usuários
-     * @return
+     * @return lista de usuários
      */
     public List<User> allUsers() {
         return userRepository.findAll();
@@ -32,7 +30,7 @@ public class UserService {
     /**
      * Busca um usuário pelo username
      * @param name
-     * @return
+     * @return usuário
      */
     public Optional<User> findUserByUsername(String name) { return userRepository.findUserByUsername(name);}
 

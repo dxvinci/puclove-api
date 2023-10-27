@@ -50,7 +50,7 @@ public class StorageController {
     }
 
     @GetMapping("/filepath/{username}")
-    public ResponseEntity<Optional<List<UserImage>>> getUserImages(@PathVariable String username) throws IOException {
+    public ResponseEntity<Optional<List<UserImage>>> getUserImages(@PathVariable String username){
         Optional<List<UserImage>> userImages = Optional.ofNullable(storageService.userImages(username));
 
         if (userImages.isEmpty())
