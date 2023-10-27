@@ -5,6 +5,7 @@ import com.example.puclove.interest.InterestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -67,7 +68,7 @@ public class UserService {
     public Optional<List<User>> matchingInterestsUsers(User user) {
 
         List<Interest> currentUserInterests = user.getInterests();
-        List<User> users = null;
+        List<User> users = new ArrayList<>();
 
         for (Interest interest : currentUserInterests) {
             users.addAll(userRepository.findUsersByInterest(interest));
