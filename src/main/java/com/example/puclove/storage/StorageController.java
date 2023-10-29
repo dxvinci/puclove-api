@@ -12,7 +12,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Controller para o armazenamento de arquivos no sistema.
@@ -56,26 +55,28 @@ public class StorageController {
 
     /**
      * Endpoint para download de imagens de usuário do sistema de arquivos. Espera o username do usuário.
-     * @param username
      * @return ResponseEntity com o arquivo de imagem.
      * @throws IOException
      */
-    @GetMapping("/{username}")
-    public ResponseEntity<?> downloadUserImagesFromFileSystem(@PathVariable String username) throws IOException {
-        List<byte[]> imagesData = storageService.downloadUserImagesFromFileSystem(username);
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<?> downloadUserImagesFromFileSystem(@PathVariable String userId) throws IOException {
+        List<byte[]> imagesData = storageService.downloadUserImagesFromFileSystem(userId);
+
+        if (imagesData.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.valueOf("image/png"))
                 .body(imagesData);
     }
 
     /**
-     * Endpoint para objetos userImages. Espera o username do usuário.
-     * @param username
+     * Endpoint para objetos userImages. Espera um Id de usuário.
      * @return ResponseEntity com lista de objetos userImages.
      */
-    @GetMapping("/filepath/{username}")
-    public ResponseEntity<Optional<List<UserImage>>> getUserImages(@PathVariable String username){
-        Optional<List<UserImage>> userImages = Optional.ofNullable(storageService.userImages(username));
+    @GetMapping("/filepath/{userId}")
+    public ResponseEntity<List<UserImage>> getUserImages(@PathVariable String userId){
+        List<UserImage> userImages = storageService.userImages(userId);
 
         if (userImages.isEmpty())
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

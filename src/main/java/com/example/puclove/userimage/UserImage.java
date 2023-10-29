@@ -4,7 +4,6 @@ import lombok.*;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
 @Document(collection = "userImages")
@@ -17,7 +16,6 @@ public class UserImage {
     @Id
     @MongoId
     private ObjectId id;
-    @DocumentReference
     private ObjectId userId;
     @Getter
     private String imagePath;

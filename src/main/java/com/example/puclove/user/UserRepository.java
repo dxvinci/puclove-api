@@ -14,6 +14,8 @@ public interface UserRepository extends MongoRepository<User, ObjectId> {
 
     Optional<User> findUserByEmailAndPassword(String email, String password);
 
+    Optional<User> findUserById(ObjectId id);
+
     @Query("{'interests':?0}")
     Collection<? extends User> findUsersByInterest(ObjectId interestId);
 

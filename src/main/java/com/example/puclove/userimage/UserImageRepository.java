@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface UserImageRepository extends MongoRepository<UserImage, ObjectId> {
 
-    List<UserImage> findByUserId(ObjectId userId);
+    List<UserImage> findUserImageByUserId(ObjectId userId);
 }

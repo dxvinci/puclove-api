@@ -2,6 +2,7 @@ package com.example.puclove.user;
 
 import com.example.puclove.interest.Interest;
 import com.example.puclove.interest.InterestRepository;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +35,10 @@ public class UserService {
      * @return usuário
      */
     public Optional<User> findUserByUsername(String name) { return userRepository.findUserByUsername(name);}
+
+    public Optional<User> findUserById(String id) {
+        return userRepository.findUserById(new ObjectId(id));
+    }
 
     /**
      * Cria um usuário no banco de dados

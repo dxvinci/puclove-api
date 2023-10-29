@@ -27,7 +27,7 @@ public class StorageService {
     @Autowired
     private UserService userService;
 
-    private final String FOLDER_PATH="./src/main/resources/static/images/";
+    private final String FOLDER_PATH = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\images\\";
 
 
     /**
@@ -39,7 +39,7 @@ public class StorageService {
      */
     public String uploadUserImageToFileSystem(MultipartFile file, User user) throws IOException {
         String filePath = FOLDER_PATH + file.getOriginalFilename();
-        FileData filedata = fileDataRepository.save(FileData.builder()
+        fileDataRepository.save(FileData.builder()
                 .name(file.getOriginalFilename())
                 .type(file.getContentType())
                 .filePath(filePath)
@@ -47,7 +47,7 @@ public class StorageService {
 
         file.transferTo(new File(filePath));
 
-        UserImage userImage = userImageRepository.save(UserImage.builder()
+        userImageRepository.save(UserImage.builder()
                 .userId(user.getId())
                 .imagePath(filePath)
                 .build());
@@ -69,15 +69,14 @@ public class StorageService {
 
     /**
      * Faz o download de todas as imagens de um usuário do sistema de arquivos.
-     * @param username
      * @return lista de arquivos de imagem.
      * @throws IOException
      */
-    public List<byte[]> downloadUserImagesFromFileSystem(String username) throws IOException {
-        User user = userService.findUserByUsername(username).orElse(null);
+    public List<byte[]> downloadUserImagesFromFileSystem(String userId) throws IOException {
+        User user = userService.findUserById(userId).orElse(null);
 
         if (user != null) {
-            List<UserImage> userImages = userImageRepository.findByUserId(user.getId());
+            List<UserImage> userImages = userImageRepository.findUserImageByUserId(user.getId());
 
             List<byte[]> imageBytesList = new ArrayList<>();
 
@@ -95,14 +94,13 @@ public class StorageService {
 
     /**
      * Retorna uma lista de objetos UserImage de um usuário.
-     * @param username
      * @return lista de objetos UserImage.
      */
-    public List<UserImage> userImages(String username) {
-        User user = userService.findUserByUsername(username).orElse(null);
+    public List<UserImage> userImages(String userId) {
+        User user = userService.findUserById(userId).orElse(null);
 
             if (user != null) {
-                return userImageRepository.findByUserId(user.getId());
+                return userImageRepository.findUserImageByUserId(user.getId());
             } else {
                 return Collections.emptyList();
             }
