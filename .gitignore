@@ -34,3 +34,6 @@ build/
 
 ### .env Files ###
 .env
+
+### images ###
+/src/main/resources/static/images/
