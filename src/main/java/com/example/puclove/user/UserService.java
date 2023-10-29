@@ -44,7 +44,7 @@ public class UserService {
         User newUser = new User(data);
 
         for (Interest interest : data.interestsIds()) {
-            Interest interests = interestRepository.findInterestById(interest.getId()).orElse(null);
+            interestRepository.findInterestById(interest.getId());
             newUser.addInterest(interest);
         }
 
@@ -71,7 +71,7 @@ public class UserService {
         List<User> users = new ArrayList<>();
 
         for (Interest interest : currentUserInterests) {
-            users.addAll(userRepository.findUsersByInterest(interest));
+            users.addAll(userRepository.findUsersByInterest(interest.getId()));
         }
 
         return Optional.of(users);

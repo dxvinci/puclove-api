@@ -1,6 +1,5 @@
 package com.example.puclove.user;
 
-import com.example.puclove.interest.Interest;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
@@ -16,7 +15,7 @@ public interface UserRepository extends MongoRepository<User, ObjectId> {
     Optional<User> findUserByEmailAndPassword(String email, String password);
 
     @Query("{'interests':?0}")
-    Collection<? extends User> findUsersByInterest(Interest interest);
+    Collection<? extends User> findUsersByInterest(ObjectId interestId);
 
     @Query("{name:'?0'}")
     Optional<User> findUserByUsername(String name);
