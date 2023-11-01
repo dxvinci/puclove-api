@@ -25,10 +25,6 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public Optional<User> singleUserByEmailAndPassword(String email, String password) {
-        return userRepository.findUserByEmailAndPassword(email, password);
-    }
-
     /**
      * Busca um usuário pelo username
      * @param name
@@ -40,30 +36,6 @@ public class UserService {
         return userRepository.findUserById(new ObjectId(id));
     }
 
-    /**
-     * Cria um usuário no banco de dados
-     * @param data
-     * @return usuário criado
-     */
-    public User createUser(UserDTO data) {
-        User newUser = new User(data);
-
-        for (Interest interest : data.interestsIds()) {
-            interestRepository.findInterestById(interest.getId());
-            newUser.addInterest(interest);
-        }
-
-        saveUser(newUser);
-        return newUser;
-    }
-
-    /**
-     * Salva um usuário no banco de dados
-     * @param user
-     */
-    public void saveUser(User user) {
-        userRepository.save(user);
-    }
 
 
     /**

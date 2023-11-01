@@ -39,17 +39,6 @@ public class User implements UserDetails {
     private Intention intention;
     private UserRole role = UserRole.USER;
 
-    public User(UserDTO data) {
-        this.name = data.name();
-        this.email = data.email();
-        this.password = data.password();
-        this.birthDate = data.birthDate();
-        this.course = data.course();
-        this.campus = data.campus();
-        this.instagram = data.instagram();
-        this.intention = data.intention();
-    }
-
     public void addInterest(Interest interest) {
         if(interests == null)
             interests = new ArrayList<>();

@@ -23,20 +23,14 @@ public class UserController {
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-    @GetMapping("/{email}/{password}")
-    public ResponseEntity<Optional<User>> getUserByEmailAndPassword(@PathVariable String email, @PathVariable String password) {
-        Optional<User> user = userService.singleUserByEmailAndPassword(email, password);
+    @GetMapping("/{userId}")
+    public ResponseEntity<Optional<User>> getUserByUserId(@PathVariable String userId) {
+        Optional<User> user = userService.findUserById(userId);
 
         if (user.isEmpty())
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
         return new ResponseEntity<>(user, HttpStatus.OK);
-    }
-
-    @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody UserDTO user) {
-        User newUser = userService.createUser(user);
-        return new ResponseEntity<>(newUser, HttpStatus.CREATED);
     }
 
     @GetMapping("/matchingUsers")
