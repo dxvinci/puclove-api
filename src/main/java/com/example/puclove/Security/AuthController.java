@@ -1,9 +1,12 @@
 package com.example.puclove.Security;
 
+import com.example.puclove.interest.Interest;
+import com.example.puclove.interest.InterestRepository;
 import com.example.puclove.user.AuthenticationDTO;
 import com.example.puclove.user.RegisterDTO;
 import com.example.puclove.user.User;
 import com.example.puclove.user.UserRepository;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,6 +15,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -30,6 +35,9 @@ public class AuthController {
     private UserRepository userRepository;
 
     @Autowired
+    private InterestRepository interestRepository;
+
+    @Autowired
     private TokenService tokenService;
 
     /**
@@ -39,7 +47,6 @@ public class AuthController {
      * @return ResponseEntity com um token JWT se a autenticação for bem-sucedida.
      */
     @PostMapping("/login")
-
     @CrossOrigin(origins = "*")
     public ResponseEntity<?> login(@RequestBody @Validated AuthenticationDTO authenticationDTO){
         var usernamePassword = new UsernamePasswordAuthenticationToken(authenticationDTO.login(), authenticationDTO.password());
@@ -71,11 +78,21 @@ public class AuthController {
                 .birthDate(registerDTO.birthDate())
                 .course(registerDTO.course())
                 .campus(registerDTO.campus())
-                .interests(registerDTO.interests())
                 .instagram(registerDTO.instagram())
                 .intention(registerDTO.intention())
                 .role(registerDTO.role())
                 .build();
+
+        for (Interest interest : registerDTO.interests()) {
+            var optionalUserInterest = interestRepository.findByInterest(interest.getInterest());
+
+            if (optionalUserInterest.isPresent()) {
+                Interest userInterest = optionalUserInterest.get();
+                newUser.addInterest(userInterest);
+            } else {
+                throw new RuntimeException("interest not found");
+            }
+        }
 
         this.userRepository.save(newUser);
 
