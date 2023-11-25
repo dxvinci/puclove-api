@@ -15,7 +15,7 @@ public class UserImage {
 
     @Id
     @MongoId
-    private ObjectId id;
+    private String id;
     private ObjectId userId;
     @Getter
     private String imagePath;

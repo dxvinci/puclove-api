@@ -49,7 +49,7 @@ public class StorageService {
         file.transferTo(new File(filePath));
 
         userImageRepository.save(UserImage.builder()
-                //.userId(user.getId())
+                .userId(new ObjectId(user.getId()))
                 .imagePath(filePath)
                 .build());
 
