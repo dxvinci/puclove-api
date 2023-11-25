@@ -2,7 +2,6 @@ package com.example.puclove.user;
 
 import com.example.puclove.interest.Interest;
 import lombok.*;
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
@@ -25,7 +24,7 @@ public class User implements UserDetails {
 
     @Id
     @MongoId
-    private ObjectId id;
+    private String id;
     private String name;
     private String email;
     private String password;
