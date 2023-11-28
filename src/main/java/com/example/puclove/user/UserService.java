@@ -36,19 +36,23 @@ public class UserService {
         return userRepository.findUserById(new ObjectId(id));
     }
 
-
-
     /**
      * Get de todos os usuários que tenham pelo menos um interesse em comum com o usuário atual
-     * @return lista de usuários
+     * @param user
+     * @return
      */
     public Optional<List<User>> matchingInterestsUsers(User user) {
-
         List<Interest> currentUserInterests = user.getInterests();
         List<User> users = new ArrayList<>();
 
         for (Interest interest : currentUserInterests) {
-            users.addAll(userRepository.findUsersByInterest(interest.getId()));
+            List<User> matchingUsers = userRepository.findUsersByInterest(interest.getId());
+
+            for (User matchingUser : matchingUsers) {
+                if (!users.contains(matchingUser) && !matchingUser.equals(user)) {
+                    users.add(matchingUser);
+                }
+            }
         }
 
         return Optional.of(users);
