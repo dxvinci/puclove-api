@@ -11,4 +11,7 @@ public interface InterestRepository extends MongoRepository<Interest, ObjectId> 
 
     Optional<Interest> findInterestById(ObjectId id);
 
+
+    Optional<Interest> findByInterest(String interest);
+
 }

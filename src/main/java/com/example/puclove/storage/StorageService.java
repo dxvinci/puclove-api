@@ -6,6 +6,7 @@ import com.example.puclove.user.User;
 import com.example.puclove.user.UserService;
 import com.example.puclove.userimage.UserImage;
 import com.example.puclove.userimage.UserImageRepository;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -48,7 +49,7 @@ public class StorageService {
         file.transferTo(new File(filePath));
 
         userImageRepository.save(UserImage.builder()
-                .userId(user.getId())
+                .userId(new ObjectId(user.getId()))
                 .imagePath(filePath)
                 .build());
 
@@ -76,7 +77,7 @@ public class StorageService {
         User user = userService.findUserById(userId).orElse(null);
 
         if (user != null) {
-            List<UserImage> userImages = userImageRepository.findUserImageByUserId(user.getId());
+            List<UserImage> userImages = userImageRepository.findUserImageByUserId(new ObjectId(user.getId()));
 
             List<byte[]> imageBytesList = new ArrayList<>();
 
@@ -100,7 +101,7 @@ public class StorageService {
         User user = userService.findUserById(userId).orElse(null);
 
             if (user != null) {
-                return userImageRepository.findUserImageByUserId(user.getId());
+                return userImageRepository.findUserImageByUserId(new ObjectId(user.getId()));
             } else {
                 return Collections.emptyList();
             }
