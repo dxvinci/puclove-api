@@ -1,8 +1,7 @@
 package com.example.puclove.user;
 
+import com.example.puclove.Security.LoginDataDTO;
 import com.example.puclove.interest.Interest;
-import com.example.puclove.interest.InterestRepository;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,21 +28,22 @@ public class UserService {
 
     /**
      * Busca um usuário pelo username
-     * @param name
      * @return usuário
      */
     public Optional<User> findUserByUsername(String name) { return userRepository.findUserByUsername(name);}
 
+    public Optional<User> findUserByEmail(String email) { return userRepository.findUserByEmail(email);}
+
     public Optional<User> findUserById(String id) {
-        return userRepository.findUserById(new ObjectId(id));
+        return userRepository.findUserById(id);
     }
+
+    public User save(User user) { return userRepository.save(user); }
 
     /**
      * Get de todos os usuários que tenham pelo menos um interesse em comum com o usuário atual
-     * @param user
-     * @return
      */
-    public Optional<List<User>> matchingInterestsUsers(User user) {
+    public Optional<List<User>> findPotentialMatches(User user) {
         List<Interest> currentUserInterests = user.getInterests();
         List<User> users = new ArrayList<>();
 
@@ -90,6 +90,36 @@ public class UserService {
         return false;
     }
 
+    public void updateUserDataFromDTO(User user, LoginDataDTO dto) {
+        if (dto.getName() != null && !dto.getName().isEmpty()) {
+            user.setName(dto.getName());
+        }
+        if (dto.getEmail() != null && !dto.getEmail().isEmpty()) {
+            user.setEmail(dto.getEmail());
+        }
+        if (dto.getBirthDate() != null) {
+            user.setBirthDate(dto.getBirthDate());
+        }
+        if (dto.getCourse() != null && !dto.getCourse().isEmpty()) {
+            user.setCourse(dto.getCourse());
+        }
+        if (dto.getCampus() != null && !dto.getCampus().isEmpty()) {
+            user.setCampus(dto.getCampus());
+        }
+        if (dto.getInterests() != null && !dto.getInterests().isEmpty()) {
+            user.setInterests(dto.getInterests());
+        }
+        if (dto.getInstagram() != null && !dto.getInstagram().isEmpty()) {
+            user.setInstagram(dto.getInstagram());
+        }
+        if (dto.getPhoneNumber() != null && !dto.getPhoneNumber().isEmpty()) {
+            user.setPhoneNumber(dto.getPhoneNumber());
+        }
+        if (dto.getIntention() != null) {
+            user.setIntention(dto.getIntention());
+        }
+    }
+
     /**
      * Verifica se houve um match entre os usuários
      * @return
@@ -105,4 +135,5 @@ public class UserService {
     public Match getMatch(String userId, String otherUserId) {
         return matchRepository.findByUserIdAndOtherUserId(userId, otherUserId);
     }
+
 }

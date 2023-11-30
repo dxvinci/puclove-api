@@ -14,6 +14,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -28,9 +30,11 @@ public class StorageService {
     @Autowired
     private UserService userService;
 
-    private final String FOLDER_PATH = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\images\\";
+    String projectPath = System.getProperty("user.dir");
+    Path frontEndPath = Paths.get(projectPath);
 
-
+    private final String FOLDER_PATH = Paths.get(frontEndPath.toString(), "Codigo","front-end", "src", "assets", "images").toString();
+    
     /**
      * Salva uma imagem de usuário no sistema de arquivos.
      * @param file
@@ -39,7 +43,7 @@ public class StorageService {
      * @throws IOException
      */
     public String uploadUserImageToFileSystem(MultipartFile file, User user) throws IOException {
-        String filePath = FOLDER_PATH + file.getOriginalFilename();
+        String filePath = FOLDER_PATH + "\\"+ file.getOriginalFilename();
         fileDataRepository.save(FileData.builder()
                 .name(file.getOriginalFilename())
                 .type(file.getContentType())

@@ -13,7 +13,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 
 @Document(collection = "users")
@@ -38,13 +37,9 @@ public class User implements UserDetails {
     private List<Match> matches;
     private List<Interaction> interactions;
     private String instagram;
-    private String zap;
+    private String phoneNumber;
     private Intention intention;
     private UserRole role = UserRole.USER;
-
-    public void addInteraction(Interaction interaction) {
-        interactions.add(interaction);
-    }
 
     public void addInterest(Interest interest) {
         if(interests == null)
@@ -52,7 +47,11 @@ public class User implements UserDetails {
         interests.add(interest);
     }
 
-    public void addMatch(Match match){
+    public void addInteraction(Interaction interaction) {
+        interactions.add(interaction);
+    }
+
+    public void addMatch(Match match) {
         matches.add(match);
     }
 

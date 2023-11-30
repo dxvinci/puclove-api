@@ -6,7 +6,6 @@ import com.example.puclove.user.AuthenticationDTO;
 import com.example.puclove.user.RegisterDTO;
 import com.example.puclove.user.User;
 import com.example.puclove.user.UserRepository;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,8 +14,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -55,7 +52,14 @@ public class AuthController {
 
         var token = tokenService.generateToken((User) auth.getPrincipal());
 
-        return ResponseEntity.ok(Map.of("token", token));
+        var user = userRepository
+                .findUserByEmail(authenticationDTO.login())
+                .orElseThrow(() -> new RuntimeException("user not found"));
+
+        var loginData = LoginDataDTO.fromUser(user);
+
+        return ResponseEntity.ok(Map.of("token", token,
+                                        "user", loginData));
     }
 
     /**
@@ -79,6 +83,7 @@ public class AuthController {
                 .course(registerDTO.course())
                 .campus(registerDTO.campus())
                 .instagram(registerDTO.instagram())
+                .phoneNumber(registerDTO.phoneNumber())
                 .intention(registerDTO.intention())
                 .role(registerDTO.role())
                 .build();
