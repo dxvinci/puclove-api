@@ -15,7 +15,9 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private InterestRepository interestRepository;
+    private InteractionRepository interactionRepository;
+    @Autowired
+    private MatchRepository matchRepository;
 
     /**
      * Busca todos os usuários
@@ -58,4 +60,49 @@ public class UserService {
         return Optional.of(users);
     }
 
+    /**
+     * Adiciona um like ao usuário e verifica se houve um match entre os usuários, caso haja, adiciona um match para cada um.
+     * @return
+     */
+    public boolean likeUser(User user, String targetUserId) {
+        String userId = user.getId();
+        Interaction interaction = new Interaction(userId, targetUserId, InteractionType.LIKE);
+
+        user.addInteraction(interaction);
+        userRepository.addInteraction(userId, interaction);
+        interactionRepository.save(interaction);
+
+        if (isAMatch(targetUserId, userId)) {
+            User likedUser = userRepository.findUserById(targetUserId).get();
+
+            Match match = new Match(userId, targetUserId);
+            Match otherUserMatch = new Match(targetUserId, userId);
+
+            user.addMatch(match);
+            likedUser.addMatch(otherUserMatch);
+
+            userRepository.addMatch(userId, match);
+            userRepository.addMatch(targetUserId, otherUserMatch);
+
+            matchRepository.save(match);
+        }
+
+        return false;
+    }
+
+    /**
+     * Verifica se houve um match entre os usuários
+     * @return
+     */
+    private boolean isAMatch(String targetUserId, String userId) {
+        return interactionRepository.findByUserIdAndTargetUserId(targetUserId, userId).isPresent();
+    }
+
+    /**
+     * Busca um match entre dois usuários
+     * @return
+     */
+    public Match getMatch(String userId, String otherUserId) {
+        return matchRepository.findByUserIdAndOtherUserId(userId, otherUserId);
+    }
 }

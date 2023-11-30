@@ -43,6 +43,23 @@ public class UserController {
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
+    /**
+     * Endpoint para requisições de curtir um usuário. Espera um corpo de requisição JSON contendo o id do usuário a ser curtido.
+     * Retorna um objeto MatchResponse contendo uma mensagem e um objeto Match, caso haja um match.
+     * @param user
+     * @param userId
+     * @return
+     */
+    @PostMapping("/like")
+    public ResponseEntity<?> likeUser(@AuthenticationPrincipal User user, @RequestBody String userId) {
+        boolean isAMatch = userService.likeUser(user, userId);
 
+        if (isAMatch) {
+            Match match = userService.getMatch(user.getId(), userId);
+            return ResponseEntity.ok(new MatchResponse("It's a match!", match));
+        } else
+            return ResponseEntity.ok(new MatchResponse("Liked!", null));
+
+    }
 
 }

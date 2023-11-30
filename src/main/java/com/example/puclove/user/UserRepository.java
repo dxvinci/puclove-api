@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends MongoRepository<User, ObjectId> {
+public interface UserRepository extends MongoRepository<User, String>, UserRepositoryCustom {
 
-    Optional<User> findUserById(ObjectId id);
+    Optional<User> findUserById(String id);
 
     @Query("{'interests':?0}")
     List<User> findUsersByInterest(ObjectId interestId);
